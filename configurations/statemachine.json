@@ -1,0 +1,152 @@
+{
+    "profile": {
+        "machine_id": "SERVER-NODE",
+        "auto_startup": false
+    },
+
+    "variables": [
+        {"key": "greeting_addr", "value": {"host": null, "port": null}, "type": "dict"},
+        {"key": "neighbours", "value": [], "type": "array"},
+        {"key": "capacity", "value": 4096, "type": "int"},
+        {"key": "in_use", "value": 0, "type": "int"},
+        {"key": "is_success", "value": false, "type": "bool"},
+        {"key": "storage", "value": [], "type": "array"},
+        {"key": "last_request", "value": {"id": null, "cmd": null, "var_name": null, "var_size": null, "client_addr": {"host": null, "port": null}}, "type": "dict"}
+    ],
+
+    "states": [
+        {
+            "id": "S_INIT",
+            "entry_action": null,
+            "inner_action": null,
+            "exit_action": null
+        },
+
+        {
+            "id": "IDLE",
+            "entry_action": null,
+            "inner_action": null,
+            "exit_action": null
+        },
+
+        {
+            "id": "QUERYING",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions", 
+                "module": "general", 
+                "function": "query", 
+                "params": ["capacity", "in_use", "storage", "last_request"]
+            },
+            "exit_action": null
+        },
+
+        {
+            "id": "LOADING",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions", 
+                "module": "storage", 
+                "function": "load", 
+                "params": ["storage", "last_request"]
+            },
+            "exit_action": null
+        },
+
+        {
+            "id": "STORING",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions", 
+                "module": "storage", 
+                "function": "store", 
+                "params": ["capacity", "in_use", "storage", "last_request"]
+            },
+            "exit_action": null
+        },
+
+        {
+            "id": "UPDATING",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions",
+                "module": "storage",
+                "function": "update",
+                "params": ["capacity", "in_use", "storage", "last_request"]
+            },
+            "exit_action": null
+        },
+
+        {
+            "id": "REPLICATING",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions",
+                "module": "storage",
+                "function": "replicate",
+                "params": ["capacity", "in_use", "storage", "last_request"]
+            },
+            "exit_action": null
+        },
+
+        {
+            "id": "S_FINAL",
+            "entry_action": null,
+            "inner_action": {
+                "package": "functions", 
+                "module": "general", 
+                "function": "finish", 
+                "params": ["neighbours"]
+            },
+            "exit_action": null
+        }
+    ],
+
+    "transitions": [
+        {
+            "source": {"$ref": "#/states/1"}, 
+            "destination": {"$ref": "#/states/1"}, 
+            "event": "GREET", 
+            "action": {
+                "package": "functions", 
+                "module": "general", 
+                "function": "greet", 
+                "params": ["greeting_addr", "neighbours"]
+            }
+        },
+
+        {
+            "source": {"$ref": "#/states/1"}, 
+            "destination": {"$ref": "#/states/1"}, 
+            "event": "LEAVE", 
+            "action": {
+                "package": "functions", 
+                "module": "general", 
+                "function": "leave", 
+                "params": ["greeting_addr", "neighbours"]
+            }
+        },
+        
+        {"source": {"$ref": "#/states/0"}, "destination": {"$ref": "#/states/1"}, "event": "START", "action": null},
+        {"source": {"$ref": "#/states/1"}, "destination": {"$ref": "#/states/2"}, "event": "QUERY", "action": null},
+        {"source": {"$ref": "#/states/1"}, "destination": {"$ref": "#/states/3"}, "event": "LOAD", "action": null},
+        {"source": {"$ref": "#/states/1"}, "destination": {"$ref": "#/states/4"}, "event": "STORE", "action": null},
+        {"source": {"$ref": "#/states/1"}, "destination": {"$ref": "#/states/5"}, "event": "UPDATE", "action": null},
+        {"source": {"$ref": "#/states/1"}, "destination": {"$ref": "#/states/6"}, "event": "REPLICATE", "action": null},
+        {"source": {"$ref": "#/states/1"},  "destination": {"$ref": "#/states/7"},  "event": "FINISH",  "action": null},
+
+        {"source": {"$ref": "#/states/2"}, "destination": {"$ref": "#/states/1"}, "event": "SUCCESS", "action": null},
+        {"source": {"$ref": "#/states/3"}, "destination": {"$ref": "#/states/1"}, "event": "SUCCESS", "action": null},
+        {"source": {"$ref": "#/states/4"}, "destination": {"$ref": "#/states/1"}, "event": "SUCCESS", "action": null},
+        {"source": {"$ref": "#/states/5"}, "destination": {"$ref": "#/states/1"}, "event": "SUCCESS", "action": null},
+        {"source": {"$ref": "#/states/6"}, "destination": {"$ref": "#/states/1"}, "event": "SUCCESS", "action": null},
+
+        {"source": {"$ref": "#/states/2"}, "destination": {"$ref": "#/states/1"}, "event": "FAIL", "action": null},
+        {"source": {"$ref": "#/states/3"}, "destination": {"$ref": "#/states/1"}, "event": "FAIL", "action": null},
+        {"source": {"$ref": "#/states/4"}, "destination": {"$ref": "#/states/1"}, "event": "FAIL", "action": null},
+        {"source": {"$ref": "#/states/5"}, "destination": {"$ref": "#/states/1"}, "event": "FAIL", "action": null},
+        {"source": {"$ref": "#/states/6"}, "destination": {"$ref": "#/states/1"}, "event": "FAIL", "action": null}
+    ],
+
+    "listener": null
+}

@@ -1,0 +1,24 @@
+{
+    "address_list_path": "_addrs_list.txt",
+
+    "buffer_size": 2048,
+
+    "commands": [
+        {"name": "GREET", "command": "GR", "query": null},
+        {"name": "LOAD", "command": "LD", "query": "LD?"},
+        {"name": "STORE", "command": "ST", "query": "ST?"},
+        {"name": "UPDATE", "command": "UPD", "query": "UPD?"},
+        {"name": "REPLICATE", "command": "REP", "query": "REP?"},
+        {"name": "LEAVE", "command": "LE", "query": null}
+    ],
+
+    "acknowledgements": [
+        {"name": "GREET", "ack": "GR-ACK", "nack": "GR-NACK"},
+        {"name": "QUERY", "ack": "Q-ACK", "nack": "Q-NACK"},
+        {"name": "LOAD", "ack": "LD-ACK", "nack": "LD-NACK"},
+        {"name": "STORE", "ack": "ST-ACK", "nack": "ST-NACK"},
+        {"name": "UPDATE", "ack": "UPD-ACK", "nack": "UPD-NACK"},
+        {"name": "REPLICATE", "ack": "REP-ACK", "nack": "REP-NACK"},
+        {"name": "LEAVE", "ack": "LE-ACK", "nack": "LE-NACK"}
+    ]
+}

@@ -1,0 +1,21 @@
+digraph STATEMACHINE {
+    // STATES
+    S_INIT [color="green" fontcolor="green"] 
+    IDLE [color="orange" fontcolor="orange"]
+    QUERYING [color="orange", fontcolor="orange"]
+    LOADING [color="blue" fontcolor="blue"]
+    STORING [color="blue" fontcolor="blue"]
+    UPDATING [color="blue" fontcolor="blue"]
+    REPLICATING [color="blue" fontcolor="blue"]
+    S_FINAL [color="red" fontcolor="red"]
+
+    // TRANSITIONS
+    S_INIT -> IDLE [label="START"]
+    IDLE -> IDLE [label="GREET/LEAVE"]
+    IDLE -> QUERYING [label="QUERY"] QUERYING -> IDLE [label="DONE/RETRY"]
+    IDLE -> LOADING [label="LOAD"] LOADING -> IDLE [label="DONE/RETRY"]
+    IDLE -> STORING [label="STORE"] STORING -> IDLE [label="DONE/RETRY"]
+    IDLE -> UPDATING [label="UPDATE"] UPDATING -> IDLE [label="DONE/RETRY"]
+    IDLE -> REPLICATING [label="REPLICATE"] REPLICATING -> IDLE [label="DONE/RETRY"]
+    IDLE -> S_FINAL [label="FINISH"]
+}
